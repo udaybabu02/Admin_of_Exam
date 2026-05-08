@@ -19,20 +19,22 @@ const Exams = () => {
 
   const fetchExams = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/admin/exams');
+      // UPDATED URL
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/exams`);
       setExams(res.data);
     } catch (err) { console.error("Error fetching exams"); }
   };
 
-
   const toggleStatus = async (id: number, currentStatus: boolean) => {
-    await axios.put(`http://localhost:5000/api/admin/exams/${id}/toggle`, { is_active: !currentStatus });
+    // UPDATED URL
+    await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/exams/${id}/toggle`, { is_active: !currentStatus });
     fetchExams();
   };
 
   const handleDelete = async (id: number) => {
     if (window.confirm("Remove this exam?")) {
-      await axios.delete(`http://localhost:5000/api/exams/${id}`);
+      // UPDATED URL
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/exams/${id}`);
       fetchExams();
     }
   };

@@ -19,16 +19,19 @@ const Questions = () => {
   useEffect(() => { fetchQuestions(); }, []);
 
   const fetchQuestions = async () => {
-    const res = await axios.get('http://localhost:5000/api/questions');
+    // UPDATED URL
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/questions`);
     setQuestions(res.data);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (editingId) {
-      await axios.put(`http://localhost:5000/api/questions/${editingId}`, formData);
+      // UPDATED URL
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/questions/${editingId}`, formData);
     } else {
-      await axios.post('http://localhost:5000/api/questions', formData);
+      // UPDATED URL
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/questions`, formData);
     }
     setShowForm(false); setEditingId(null); setFormData(initialForm); fetchQuestions();
   };
@@ -36,7 +39,8 @@ const Questions = () => {
   const handleBulkUpload = async () => {
     try {
       const parsed = JSON.parse(bulkText);
-      await axios.post('http://localhost:5000/api/questions/bulk', { questions: parsed });
+      // UPDATED URL
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/questions/bulk`, { questions: parsed });
       alert("Set imported successfully!");
       setBulkText(""); fetchQuestions();
     } catch (e) { alert("Invalid JSON format!"); }
@@ -44,7 +48,8 @@ const Questions = () => {
 
   const handleDelete = async (id: number) => {
     if (window.confirm("Delete?")) {
-      await axios.delete(`http://localhost:5000/api/questions/${id}`);
+      // UPDATED URL
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/questions/${id}`);
       fetchQuestions();
     }
   };
@@ -94,8 +99,8 @@ const Questions = () => {
               <td style={{ padding: '15px' }}>{q.subject}</td>
               <td style={{ padding: '15px' }}>{q.question_text}</td>
               <td style={{ padding: '15px' }}>
-                <button onClick={() => { setFormData(q); setEditingId(q.id); setShowForm(true); }} style={{ marginRight: '10px', color: '#2563eb', background: 'none', border: 'none' }}><Edit size={18}/></button>
-                <button onClick={() => handleDelete(q.id)} style={{ color: '#dc2626', background: 'none', border: 'none' }}><Trash2 size={18}/></button>
+                <button onClick={() => { setFormData(q); setEditingId(q.id); setShowForm(true); }} style={{ marginRight: '10px', color: '#2563eb', background: 'none', border: 'none', cursor: 'pointer' }}><Edit size={18}/></button>
+                <button onClick={() => handleDelete(q.id)} style={{ color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer' }}><Trash2 size={18}/></button>
               </td>
             </tr>
           ))}

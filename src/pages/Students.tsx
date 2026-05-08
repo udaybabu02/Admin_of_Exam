@@ -40,14 +40,15 @@ const Students = () => {
     setError(null);
     try {
       // Step 7 & 8: Fetching users and results from the backend
+      // UPDATED URLs
       const [usersRes, resultsRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/admin/users'),
-        axios.get('http://localhost:5000/api/admin/results')
+        axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/admin/results`)
       ]);
       setUsers(usersRes.data);
       setResults(resultsRes.data);
     } catch (err) {
-      setError("Could not connect to the server. Ensure the backend is running on port 5000.");
+      setError("Could not connect to the server. Ensure the backend is running.");
       console.error("Fetch error:", err);
     } finally {
       setLoading(false);

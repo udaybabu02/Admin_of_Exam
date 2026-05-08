@@ -38,7 +38,7 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Step 9: Calling the dynamic analytics endpoint
-        const res = await axios.get('http://localhost:5000/api/admin/analytics');
+       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/analytics`);
         
         // Calculate total exams completed from performance array
         const completed = res.data.performance.reduce((acc: number, curr: any) => acc + curr.count, 0);
