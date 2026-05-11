@@ -17,7 +17,7 @@ const AdminLogin = () => {
       return;
     }
     
-    if (email === 'madhubabukollla@gmail.com' && password === 'madhubabu@12345') {
+    if (email === 'madhubabukolla@gmail.com' && password === 'madhubabu@12345') {
       localStorage.setItem('adminAuth', 'true');
       navigate('/dashboard');
     } else {
