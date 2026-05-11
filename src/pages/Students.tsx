@@ -1,27 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Users, FileText, RefreshCw } from 'lucide-react';
+import { Users, FileText, RefreshCw, Loader2 } from 'lucide-react';
 
 interface User {
-  id: number;
-  name: string;
-  email: string;
-  mobile: string;
-  id_type: string;
-  user_id_value: string;
-  hall_ticket: string;
+  id: number; name: string; email: string; mobile: string; hall_ticket: string; user_id_value: string;
 }
 
 interface Result {
-  id: number;
-  student_name: string;
-  exam_id: string;
-  score_percentage: number;
-  status: string;
-  total_questions: number;
-  correct_count: number;
-  wrong_count: number;
-  created_at: string;
+  id: number; student_name: string; exam_id: string; score_percentage: number; status: string;
+  total_questions: number; correct_count: number; wrong_count: number;
 }
 
 const Students = () => {
@@ -29,26 +16,19 @@ const Students = () => {
   const [results, setResults] = useState<Result[]>([]);
   const [activeTab, setActiveTab] = useState<'users' | 'results'>('results');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => { fetchData(); }, []);
 
   const fetchData = async () => {
     setLoading(true);
-    setError(null);
     try {
-      // Step 7 & 8: Fetching users and results from the backend
-      // UPDATED URLs
       const [usersRes, resultsRes] = await Promise.all([
         axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`),
         axios.get(`${import.meta.env.VITE_API_URL}/api/admin/results`)
       ]);
-      setUsers(usersRes.data);
-      setResults(resultsRes.data);
+      setUsers(Array.isArray(usersRes.data) ? usersRes.data : []);
+      setResults(Array.isArray(resultsRes.data) ? resultsRes.data : []);
     } catch (err) {
-      setError("Could not connect to the server. Ensure the backend is running.");
       console.error("Fetch error:", err);
     } finally {
       setLoading(false);
@@ -64,8 +44,6 @@ const Students = () => {
         </button>
       </div>
 
-      {error && <div style={{ backgroundColor: '#fee2e2', color: '#b91c1c', padding: '10px', borderRadius: '6px', marginBottom: '20px', border: '1px solid #f87171' }}>{error}</div>}
-
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '2px solid #e2e8f0', paddingBottom: '10px' }}>
         <button onClick={() => setActiveTab('results')} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 20px', backgroundColor: activeTab === 'results' ? '#2563eb' : 'transparent', color: activeTab === 'results' ? 'white' : '#475569', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
           <FileText size={18} /> Exam Results
@@ -76,7 +54,7 @@ const Students = () => {
       </div>
 
       {loading ? (
-        <p style={{ color: '#64748b' }}>Loading data from Aiven Cloud...</p>
+        <div style={{textAlign: 'center', padding: '40px'}}><Loader2 className="animate-spin" /> Fetching from Cloud DB...</div>
       ) : (
         <div style={{ backgroundColor: 'white', borderRadius: '8px', border: '1px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
@@ -100,7 +78,7 @@ const Students = () => {
             </thead>
             <tbody>
               {activeTab === 'results' ? (
-                results.length > 0 ? results.map((r) => (
+                results?.length > 0 ? results.map((r) => (
                   <tr key={r.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                     <td style={{ padding: '15px', fontWeight: 'bold' }}>{r.student_name}</td>
                     <td style={{ padding: '15px', color: '#64748b' }}>{r.exam_id}</td>
@@ -110,7 +88,7 @@ const Students = () => {
                   </tr>
                 )) : <tr><td colSpan={5} style={{ padding: '30px', textAlign: 'center', color: '#94a3b8' }}>No exam results found.</td></tr>
               ) : (
-                users.length > 0 ? users.map((u) => (
+                users?.length > 0 ? users.map((u) => (
                   <tr key={u.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                     <td style={{ padding: '15px', fontWeight: 'bold' }}>{u.name}</td>
                     <td style={{ padding: '15px' }}>{u.email}</td>
