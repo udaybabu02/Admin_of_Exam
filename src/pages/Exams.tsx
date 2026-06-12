@@ -23,7 +23,7 @@ const Exams = () => {
     setLoading(true);
     try {
       // 🚀 FIXED: Hardcoded to bypass the stubborn .env file
-      const res = await axios.get(`http://localhost:5000/api/admin/exams`);
+      const res = await axios.get(`https://examportal-backend-xbw5.onrender.com/api/admin/exams`);
       setExams(Array.isArray(res.data) ? res.data : []);
     } catch (err) { 
       console.error("Error fetching exam configurations:", err); 
@@ -36,7 +36,7 @@ const Exams = () => {
     setUpdatingId(id);
     try {
       // 🚀 FIXED: Hardcoded to bypass the stubborn .env file
-      await axios.put(`http://localhost:5000/api/admin/exams/${id}/toggle`, { 
+      await axios.put(`https://examportal-backend-xbw5.onrender.com/api/admin/exams/${id}/toggle`, { 
         is_active: !currentStatus 
       });
       await fetchExams(); 
